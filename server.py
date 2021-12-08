@@ -70,12 +70,16 @@ def purchasePlaces():
             flash('Please enter a number!')
     else:
         flash('The date of the competition is in the past')
-        
+
     return render_template('welcome.html', club=club, competitions=competitions)
 
-
-# TODO: Add route for points display
-
+@app.route('/displayPoints/<club>')
+def displayPoints(club):
+    try:
+        foundClub = [c for c in clubs if c['name'] == club][0]
+        return render_template('points.html',club=foundClub, clubs=clubs)
+    except IndexError:
+        return render_template('points.html', clubs=clubs)
 
 @app.route('/logout')
 def logout():

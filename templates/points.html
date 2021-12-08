@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUDLFT Clubs points</title>
+</head>
+<body>
+
+    <h1>Welcome to the GUDLFT Clubs points.</h1>
+    
+    <h3>Clubs:</h3>
+    <ul>
+        {% for club in clubs%}
+        <li>
+            {{club['name']}}<br />
+            Points left: {{club['points']}}</br>
+        </li>
+        <hr />
+        {% endfor %}
+    </ul>
+
+    {% if club %}
+    <form action="/showSummary" method="post">
+        <input type="hidden" name="email" value="{{club['email']}}">
+        <button type="submit">Return on competitions</button>
+    </form>
+    {% else %}
+    <a href="{{url_for('index')}}">Login</a>
+    {% endif %}
+
+</body>
+</html>

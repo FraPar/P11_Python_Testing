@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1>Welcome to the GUDLFT Registration Portal!</h1>
+
     Please enter your secretary email to continue:
     <form action="showSummary" method="post">
         <label for="email">Email:</label>
@@ -15,6 +16,8 @@
     {% if error %}
         {{error}}
     {% endif %}
-    
+
+    <a href="{{url_for('displayPoints',club='notLogged')}}">View clubs points</a>
+
 </body>
 </html>
