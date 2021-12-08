@@ -1,5 +1,6 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for
+from datetime import datetime
 
 
 def loadClubs():
@@ -20,11 +21,9 @@ app.secret_key = 'something_special'
 competitions = loadCompetitions()
 clubs = loadClubs()
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
@@ -34,7 +33,6 @@ def showSummary():
     except IndexError:
         error = 'No email founded, please try again!'
         return render_template('index.html', error=error)
-
 
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
@@ -46,19 +44,24 @@ def book(competition,club):
         flash("Something went wrong-please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
 
-
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
-    pointFactor = 1
-    clubPoints = int(club['points'])/pointFactor
-    placesRequired = int(request.form['places'])
-    if placesRequired <= 12 and placesRequired > 0 and clubPoints >= placesRequired:
-        competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-        flash('Great-booking complete!')
+
+    CurrentDate = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+
+    if str(CurrentDate) < str(competition['date']):
+        pointFactor = 1
+        clubPoints = int(club['points'])/pointFactor
+        placesRequired = int(request.form['places'])
+        if placesRequired <= 12 and placesRequired > 0 and clubPoints >= placesRequired:
+            competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
+            flash('Great-booking complete!')
+        else:
+            flash("Booking not complete! Places must be between 0 and 12 and under your current club's points.")
     else:
-        flash("Booking not complete! Places must be between 0 and 12 and under your current club's points.")
+        flash('The date of the competition is in the past')
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
