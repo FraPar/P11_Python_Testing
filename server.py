@@ -54,11 +54,11 @@ def purchasePlaces():
     pointFactor = 1
     clubPoints = int(club['points'])/pointFactor
     placesRequired = int(request.form['places'])
-    if clubPoints >= placesRequired:
+    if placesRequired <= 12 and placesRequired > 0 and clubPoints >= placesRequired:
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
         flash('Great-booking complete!')
     else:
-        flash("Booking not complete! Places must be under your current club's points.")  
+        flash("Booking not complete! Places must be between 0 and 12 and under your current club's points.")
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
