@@ -16,5 +16,5 @@ def test_access_points_board_unlogged(client):
         "/displayPoints/notLogged", follow_redirects=True
     )
     data = response.data.decode()
-    assert data.find("Welcome") == 189
+    assert data.find("Welcome to the GUDLFT Clubs points") == 189
     
